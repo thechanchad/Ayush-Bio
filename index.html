@@ -368,7 +368,10 @@
             font-size: 4rem;
             margin-bottom: 15px;
         }
-
+.profile-image,
+.gallery-item img {
+    cursor: zoom-in;
+}
         /* Animations */
         @keyframes fadeInDown {
             from {
@@ -453,6 +456,7 @@
                 padding: 20px;
             }
         }
+        
     </style>
 </head>
 <body>
@@ -654,6 +658,47 @@
                 closeGallery();
             }
         });
+            /* Open image in fullscreen */
+    function openImageViewer(src) {
+        const viewer = document.getElementById('imageViewer');
+        document.getElementById('viewerImage').src = src;
+        viewer.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    /* Close fullscreen image */
+    function closeImageViewer() {
+        const viewer = document.getElementById('imageViewer');
+        viewer.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    /* Attach click event to ALL images */
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('click', function () {
+            openImageViewer(this.src);
+        });
+    });
+
+    /* Close when clicking outside image */
+    document.getElementById('imageViewer').addEventListener('click', function (e) {
+        if (e.target === this) closeImageViewer();
+    });
+
+    /* Close with ESC key */
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeImageViewer();
+    });
     </script>
+
+    <!-- Fullscreen Image Viewer -->
+<div class="modal" id="imageViewer">
+    <div class="close-modal" onclick="closeImageViewer()">&times;</div>
+    <div class="modal-content">
+        <img id="viewerImage" src="" alt="Full View"
+             style="max-width:90vw; max-height:90vh; object-fit:contain;">
+    </div>
+</div>
+
 </body>
 </html>
